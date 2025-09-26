@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content=" Aarogyam - Mental and Psychological Support System ">
+    <title>Aarogyam - Mental and Psychological Support System</title>
+    <link rel="stylesheet" href="stylesheet.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="https://unpkg.com/typed.js@2.0.15/dist/typed.umd.js"></script>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script> <!--3-->
+  
+
+    <!-- Initialize Firebase -->
+    <script>
+        // Your web app's Firebase configuration  
+        const firebaseConfig = {
+            apiKey: "AIzaSyAGxPQc1nvALk9GBBqF-DmQqUDCkcSVSNU",                                    //2 
+            authDomain: "aarogyam-f3751.firebaseapp.com",
+            databaseURL: "https://aarogyam-f3751-default-rtdb.firebaseio.com",
+            projectId: "aarogyam-f3751",
+            storageBucket: "aarogyam-f3751.firebasestorage.app",
+            messagingSenderId: "885894128298",
+            appId: "1:885894128298:web:b1424fdf45a2bf83c666d3",
+            measurementId: "G-XFQ9F4BVFP"
+        };
+
+        // Initialize Firebase
+        try {
+            const app = firebase.initializeApp(firebaseConfig);
+            console.log('Firebase initialized successfully');
+            const analytics = getAnalytics(app);
+            
+        } catch (error) {
+            console.error('Firebase initialization error:', error.message);
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/open-dyslexic@0.0.1/open-dyslexic.min.css">
+</head>
+
+<body>
+    <!-- Skip to main content link for accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <header class="header">
+        <img src="/boxicons-icons-images/Aarogyam.png" width="150" height="40" alt="Aarogyam Logo">
+
+        <nav class="navbar" role="navigation" aria-label="Main navigation">
+            <div class="nav-container">
+                <!-- Navigation links -->
+                <div class="nav-links">
+                    <a href="#home" style="--i:1"><i class="fas fa-home"></i>Home</a>
+                    <a href="#about" style="--i:2"><i class="fas fa-info-circle"></i>About</a>
+                    <a href="#conditions" style="--i:3"><i class="fas fa-brain"></i>Conditions</a>
+                    <a href="#support" style="--i:4"><i class="fas fa-hands-helping"></i>Support</a>
+                    <a href="#resources" style="--i:5"><i class="fas fa-book"></i>Resources</a>
+                    <a href="#contact" style="--i:6"><i class="fas fa-envelope"></i>Contact</a>
+                </div>
+            </div>
+
+            <!-- Auth Buttons -->
+            <div class="auth-buttons">
+                <button type="button" class="login-btn" onclick="showLoginModal()" style="--i:7">
+                    <i class="fas fa-sign-in-alt"></i>Login
+                </button>
+                <button type="button" class="signup-btn" onclick="showSignupModal()" style="--i:8">
+                    <i class="fas fa-user-plus"></i>Sign Up
+                </button>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <button class="mobile-menu-btn" aria-label="Toggle menu" aria-expanded="false" aria-controls="menu">
+                <i class="fas fa-bars menu-icon"></i>
+                <i class="fas fa-times close-icon"></i>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Breadcrumb Bar -->
+    <nav class="breadcrumb-bar" aria-label="Breadcrumb" style="background:#f6f6e9;padding:8px 5%;font-size:15px;">
+        <span id="breadcrumb-path">Home</span>
+    </nav>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModals()">&times;</span>
+            <h2>Login</h2>
+            <div class="social-login">
+                <button class="social-btn google" onclick="handleSocialLogin('google')">
+                    <i class="fab fa-google"></i> Continue with Google
+                </button>
+                <button class="social-btn facebook" onclick="handleSocialLogin('facebook')">
+                    <i class="fab fa-facebook-f"></i> Continue with Facebook
+                </button>
+                <button class="social-btn github" onclick="handleSocialLogin('github')">
+                    <i class="fab fa-github"></i> Continue with GitHub
+                </button>
+            </div>
+            <div class="divider">
+                <span>or</span>
+            </div>
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" required>
+                    <a href="#" class="forgot-password" onclick="showForgotPassword()">Forgot Password?</a>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="submit-btn">Login</button>
+                </div>
+                <p class="form-footer">
+                    Don't have an account? <a href="#" onclick="switchToSignup()">Sign up</a>
+                </p>
+            </form>
+        </div>
+    </div>
+    <!-- Signup Modal -->
+    <div id="signupModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModals()">&times;</span>
+            <h2>Sign Up</h2>
+            <form id="signupForm" onsubmit="handleSignup(event)">
+                <div class="form-group">
+                    <label for="firstName">First Name</label>
+                    <input type="text" id="firstName" required placeholder="Enter your first name">
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Last Name</label>
+                    <input type="text" id="lastName" required placeholder="Enter your last name">
+                </div>
+                <div class="form-group">
+                    <label for="signupEmail">Email</label>
+                    <input type="email" id="signupEmail" required placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label for="signupPassword">Password</label>
+                    <input type="password" id="signupPassword" required placeholder="Enter your password">
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" required placeholder="Confirm your password">
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="submit-btn">Sign Up</button>
+                </div>
+                <p class="form-footer">
+                    Already have an account? <a href="#" onclick="switchToLogin()">Login</a>
+                </p>
+            </form>
+        </div>
+    </div>
+    <!-- Forgot Password Modal -->
+    <div id="forgotPasswordModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModals()">&times;</span>
+            <h2>Reset Password</h2>
+            <p class="modal-description">Enter your email address and we'll send you instructions to reset your
+                password.</p>
+            <form id="forgotPasswordForm" onsubmit="handleForgotPassword(event)">
+                <div class="form-group">
+                    <label for="resetEmail">Email</label>
+                    <input type="email" id="resetEmail" required>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="submit-btn">Send Reset Link</button>
+                </div>
+                <p class="form-footer">
+                    Remember your password? <a href="#" onclick="switchToLogin()">Login</a>
+                </p>
+            </form>
+        </div>
+    </div>
+    <section class="home" id="home">
+        <div class="home-content">
+            <h2>Welcome to Aarogyam!</h2>
+            <h1>Understanding Mental and Psychological Disorder </h1>
+            <h4>We Provide <span class="text"></span></h4>
+            <br>Supporting individuals with mental and psychological disorder through understanding, resources, and
+            community and make a change in their life.</br>
+            <div class="home-sci">
+                <a href="https://www.linkedin.com/in/ratn-sharma-a2b282356?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"
+                    style="--i:8"><i class="fab fa-linkedin"></i></a>
+                <a href="https://github.com/ratn212126" style="--i:9"><i class="fab fa-github"></i></a>
+                <a href="https://x.com/vgarg5960?t=KDnqoTtMpTbVhfp-eMRvgA&s=09" style="--i:10"><i
+                        class="fab fa-twitter"></i></a>
+                <a href="https://www.instagram.com/ratn_._k?igsh=b2JzZGw2YjI0bDFn" style="--i:12"><i
+                        class="fab fa-instagram"></i></a>
+            </div>
+            <div class="cta-buttons">
+                <a href="#support" class="btn-box primary">Get Support</a>
+                <a href="#resources" class="btn-box secondary">Find Resources</a>
+            </div>
+        </div>
+        </div>
+        </div>
+        <span class="home-imgHover"></span>
+    </section>
+
+    <section class="about" id="about">
+        <div class="about-content">
+            <img
+                src="https://img.freepik.com/free-vector/parkinson-disease-abstract-concept-vector-illustration-parkinson-cause-treatment-age-depression-problem-disease-symptoms-progressive-nervous-system-disorder-tremor-abstract-metaphor_335657-1560.jpg?semt=ais_hybrid&w=740">
+        </div>
+        <div class="about-text">
+            <h2>About <span>Mental and Psychological Disorder</span></h2>
+            <p> Mental and psychological disorders affect how a person thinks, feels, manages stress, and interacts with
+                others. We're here to provide support, understanding, and resources for individuals and families
+                affected by these conditions.</p>
+            <div class="info-grid">
+                <div class="info-card">
+                    <i class='bx bx-brain' style="color:blue"></i>
+                    <h3>Understanding</h3>
+                    <p> Learn about different types of mental and psychological disorders and how they affect daily
+                        life. These disorders encompass a range of conditions impacting emotions, behavior, stress
+                        management, and social functioning, which can significantly influence overall well-being and
+                        everyday activities.</p>
+
+                </div>
+                <div class="info-card">
+                    <i class='bx bx-help-circle' style="color:blue"></i>
+                    <h3>Support</h3>
+                    <p>Access professional help, support groups, and community resources. you can consider accessing
+                        professional help, joining support groups, and utilizing community resources. For emotional
+                        distress, the 988 Suicide & Crisis Lifeline offers 24/7 confidential support via call, text, or
+                        online chat.</p>
+                </div>
+                <div class="info-card">
+                    <i class='bx bx-book-reader' style="color:blue"></i>
+                    <h3>Education</h3>
+                    <p>Educational resources and strategies for learning and development. A comprehensive learning and
+                        development (L&D) strategy outlines how an organization develops its workforce, aligning with
+                        business goals and addressing employee learning needs.</p>
+                </div>
+                <div class="info-card">
+                    <i class='bx bx-group' style="color:blue"></i>
+                    <h3>Community</h3>
+                    <p>Connect with others who understand and share similar experiences. Connecting with a community,
+                        especially one where individuals share similar experiences, is crucial for well-being. It
+                        fosters a sense of belonging, reduces feelings of isolation.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="conditions" id="conditions">
+            <div class="container">
+                <h1 class="sub-title">Mental and Psychological <span>Conditions</span></h1>
+                <div class="services-list">
+                    <div>
+                        <img src="https://pearlbuckcenter.com/content/uploads/2016/04/intellectual-disability.jpg"
+                            alt="Company Logo" style="width:50px; height:50px;color:blue">
+                        <h2>Learning Disorder</h2>
+                        <p> Difficulties with mood regulation, behavior, stress management, or coping with emotions can
+                            be indicators of mental and psychological disorders, which are distinct from cognitive
+                            disabilities. <br><br><br>
+
+                        <p>
+                            <a href="https://www.nimh.nih.gov/health/topics/depression" class="read">Learn More</a>
+                    </div>
+                    <div>
+                        <img src="https://ik.imagekit.io/o8qjepjebt/Screenshot%202025-06-01%20172228.png?updatedAt=1748778774631"
+                            alt="Company Logo" style="width:50px; height:50px;color:#0ef">
+                        <h2>Anxiety Disorders</h2>
+                        <p> Anxiety Disorder is a mental health condition characterized by excessive worry, fear, and
+                            nervousness, which can interfere with daily life, relationships, work, and overall
+                            functioning. It may persist over time and vary in intensity across different situations.</p>
+                        <a href=" https://www.mayoclinic.org/diseases-conditions/anxiety/symptoms-causes/syc-20350961"
+                            class="read">Learn More</a>
+                    </div>
+                    <div>
+                        <img src="https://www.shutterstock.com/image-vector/infinity-rainbow-symbol-polygonal-style-600nw-2303446797.jpg"
+                            style="width:50px; height:50px;color:#0ef">
+                        <h2>Somatic Symptom Disorder</h2>
+                        <p> Somatic Symptom Disorder (SSD) is a psychological disorder involving excessive focus on
+                            physical symptoms like pain or fatigue, causing distress and affecting daily life and
+                            well-being.</p>
+                        <a href="https://www.mayoclinic.org/diseases-conditions/somatic-symptom-disorder/symptoms-causes/syc-20377776"
+                            class="read">Learn More</a>
+                    </div>
+                    <div>
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQnHmaLFpQ_ngx-1c6UXEAn7JKPvNOnUqkUSQ&s"
+                            style="width:50px; height:50px;color:#0ef">
+                        <h2>Memory Disorders</h2>
+                        <p> Memory problems can arise as a result of mental and psychological disorders, affecting
+                            concentration, recall, learning ability, daily functioning, and overall emotional well-being
+                            in individuals. Treatment focuses on engagement with people.</p>
+                        <a href="https://www.healthline.com/health/memory-disorders" class="read">Learn More</a>
+                    </div>
+                    <div>
+                        <img src="https://www.nsedu.org/wp-content/uploads/2023/03/Developmental-Disabilities-Month.jpg"
+                            alt="Company Logo" style="width:50px; height:50px;color:#0ef">
+                        <h2>Developmental Disorders</h2>
+                        <p>Developmental Disorders are neurological conditions affecting brain development, leading to
+                            impairments in skills like language, social interaction, or learning.They can impact
+                            everyday functioning and usually last throughout a person's lifetime. <br><br></p>
+                        <a href="https://specialeducationnotes.co.in/IDDPAPER2UNIT1.htm#google_vignette"
+                            class="read">Learn More</a>
+                    </div>
+                    <div>
+                        <img src="https://www.geetanjalihospital.co.in/img/media/cache/blogs/01/825x408/1010/neuro-blog-banner.jpg"
+                            style="width:50px; height:50px;color:#0ef">
+                        <h2>Post-Traumatic Stress Disorder (PTSD)</h2>
+                        <p> Post-Traumatic Stress Disorder (PTSD) can develop as a consequence of experiencing or
+                            witnessing traumatic events, leading to intrusive memories, heightened anxiety, emotional
+                            distress, and difficulties in daily functioning.</p>
+                        <a href=" https://www.mayoclinic.org/diseases-conditions/post-traumatic-stress-disorder/symptoms-causes/syc-20355967"
+                            class="read">Learn More</a>
+                    </div>
+                    <div>
+                        <img src="https://www.nctcog.org/getmedia/b4172307-a7e3-4bdb-b7ca-012798fd7f56/Dementia-logo.png"
+                            style="width:50px; height:50px;color:#0ef">
+                        <h2>Obsessive-Compulsive Disorder (OCD)</h2>
+                        <p> Obsessive-Compulsive Disorder (OCD) may develop as a result of mental and psychological
+                            factors, causing recurring intrusive thoughts, compulsive behaviors, anxiety, and
+                            difficulties in managing daily routines and decision-making.</p>
+                        <a href=" https://www.mayoclinic.org/diseases-conditions/obsessive-compulsive-disorder/symptoms-causes/syc-20354432"
+                            class="read">Learn More</a>
+                    </div>
+                    <div>
+                        <img src="https://thumbs.dreamstime.com/b/art-illustration-354277476.jpg"
+                            style="width:50px; height:50px;color:#0ef">
+                        <h2> Sleeping Disorders</h2>
+                        <p>Sleep disorders, such as insomnia and frequent nightmares, are conditions that affect the
+                            ability to fall asleep, stay asleep, or achieve restful sleep. They can be caused by stress,
+                            mental and psychological factors, medical conditions, or lifestyle habits, leading to
+                            fatigue, irritability, and impaired daily functioning.<br><br></p>
+                        <a href=" https://www.mayoclinic.org/diseases-conditions/sleep-disorders/symptoms-causes/syc-20354018"
+                            class="read">Learn More</a>
+                    </div>
+                </div>
+
+                <section>
+                    <div id="support" id="support">
+                        <div class="main-text" id="support">
+                            <h2>Support <span>Services</span></h2>
+
+                            <div class="portfolio-content">
+                                <div class="row">
+                                    <img
+                                        src="https://excelsia.edu.au/wp-content/uploads/2021/10/Professional-Development-Counselling-1024x683.jpg">
+                                    <div class="layer">
+                                        <h5><br>Professional Counselling</h5>
+                                        <p> One-on-one therapy sessions with specialized therapists and counsellors can
+                                            be highly beneficial for individuals with mental and psychological
+                                            disorders. These sessions, often involving approaches like mindfulness
+                                            practices
+                                            and stress management techniques, aim to enhance emotional regulation, build
+                                            resilience, improve
+                                            coping strategies, and reduce symptoms of anxiety or depression. Therapists
+                                            may also provide support in areas of relationship counseling, self-care
+                                            planning and connecting individuals with community-based mental health
+                                            resources. <br>
+                                            <a href="https://www.mindpeers.co/?utm_term=&utm_campaign=PMax+%7C+B2C+%7C+Therapy+%7C+Brand+%7C+IN&utm_source=adwords&utm_medium=ppc&hsa_acc=1126412991&hsa_cam=21945330714&hsa_grp=&hsa_ad=&hsa_src=x&hsa_tgt=&hsa_kw=&hsa_mt=&hsa_net=adwords&hsa_ver=3&gad_source=1&gad_campaignid=21951705515&gbraid=0AAAAABjaCrsuWDC0RWTVOJ4TnxoEPGY8L&gclid=Cj0KCQjww4TGBhCKARIsAFLXndSibHj-Bm7CDtXZVLJKIMntKaO6rGIHUbFrLsxiWPaXdGp6FRag7MQaAlcTEALw_wcB"
+                                                class="great" style="color:aliceblue" ,margin-bottom:10px;>Schedule
+                                                Session</a>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <img
+                                        src="https://media.istockphoto.com/id/1454585686/photo/diversity-mental-health-and-group-therapy-counseling-support-meeting-healthy-conversation-and.jpg?s=612x612&w=0&k=20&c=7-kDTlCiMLzq_MM6yhnv7mZbyB7HWxM1n_JE5EkR9ZE=">
+                                    <div class="layer">
+                                        <h5>Support Groups</h5>
+                                        <p> Guided group sessions and discussions can be highly beneficial for
+                                            individuals with mental and psychological disorders, offering opportunities
+                                            for emotional support, stress relief, and shared understanding in a safe
+                                            environment. These sessions, often led by therapists or trained
+                                            professionals, provide a structured space for individuals to express
+                                            feelings, learn coping strategies, and build social connections through
+                                            shared experiences.</p>
+                                        <a href="https://themindclan.com/" class="great" style="color:aliceblue">Join
+                                            Group</a>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <img
+                                        src="https://health.ucdavis.edu/media-resources/contenthub/health-news/2022/12/thumbnail/mom-son-down-syndrome-th.jpg">
+                                    <div class="layer">
+                                        <h5>Educational Support</h5>
+                                        <p> For individuals with mental and psychological disorders, effective support
+                                            strategies and accommodations involve reducing stressors, providing clear
+                                            and flexible instructions, incorporating relaxation or mindfulness
+                                            techniques, and ensuring a safe and understanding environment.
+                                            Accommodations should focus on promoting emotional well-being and adaptive
+                                            coping, rather than only performance, to help individuals engage
+                                            meaningfully in learning and daily activities.</p>
+                                        <a href="https://ldaamerica.org/info/accommodations-techniques-and-aids-for-learning/"
+                                            class="great" style="color:aliceblue">Learn More</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section>
+                    <div class="services" id="resources">
+                        <div class="container">
+                            <h1 class="sub-title">Helpful <span>Resources</span></h1>
+                            <div class="services-list">
+                                <div>
+                                    <img src="https://www.deque.com/wp-content/uploads/2019/10/cognitive.png"
+                                        alt="Company Logo" style="width:50px; height:50px; color:#0ef">
+                                    <h2>Educational Materials</h2>
+                                    <ul>
+                                        <li>Learning Strategies</li>
+                                        <li>Study Techniques</li>
+                                        <li>Accommodation Guides</li>
+                                        <li>Posters and Charts</li>
+                                        <li>Flashcards</li>
+                                        <li>Simplified Interfaces</li>
+                                        <li>Picture Boards</li>
+                                        <li>Models and Props</li>
+                                        <li>Quizlet – Special Education Flashcards</li>
+                                        <li>Teachers Pay Teachers – Free Special Education Posters</li>
+                                    </ul>
+                                    <a href="https://www.teacherspayteachers.com/Browse/Price-Range/Free/Type-of-Resource/Flash-Cards/Subject-areas/Special-Education"
+                                        class="read" style="color:aliceblue">Learn More</a>
+                                </div>
+
+                                <div>
+                                    <img src="https://thumbs.dreamstime.com/b/professional-intellectual-disability-icon-inclusive-design-projects-intellectual-disability-icon-related-to-disability-ideal-359446407.jpg"
+                                        alt="Company Logo" style="width:70px; height:50px;color:#0ef">
+                                    <h2>Video Resources</h2>
+                                    <ul>
+                                        <li>Mindfulness Videos for Teens</li>
+                                        <li>Educational Videos</li>
+                                        <li>Expert Interviews</li>
+                                        <li>Success Stories</li>
+                                        <li>Mental Health Awareness Month Campaign</li>
+                                        <li>Video Library</li>
+                                        <li>Intellectual Disability</li>
+                                        <li>Special Education Categories</li>
+                                        <li>Mindfulness & Brain Boosting Activities</li>
+                                        <li>Special Books by Special Kids (SBSK)</li>
+                                    </ul>
+                                    <a href="https://childmind.org/resources/videos/" class="read"
+                                        style="color:aliceblue">Get More</a>
+                                </div>
+                                <div>
+                                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfPMoOpVwSYxgpxG0VeINVso46bbNXDAcuXQ&s"
+                                        style="width:50px; height:50px;color:#0ef">
+                                    <h2>Useful Links</h2>
+                                    <li>Special Olympics: https://www.specialolympics.org/</li>
+                                    <li>NIMH: https://www.nimh.nih.gov/</li>
+                                    <li>W3C Web Accessibility Initiatives: https://www.w3.org/WAI/</li>
+                                    <li>https://adasitecompliance.com/</li>
+                                    <li>https://a11y.canada.ca/en/</li>
+                                    <p> To create content that is accessible to individuals with mental and
+                                        psychological disorders, focus on supportive and non-triggering language,
+                                        incorporate calming visuals, and provide flexible options for engagement. Reduce
+                                        overwhelming elements, include stress-management or self-care prompts where
+                                        appropriate, and ensure the flow of information is empathetic, clear, and easy
+                                        to follow.</p>
+                                    <a href="https://resources.specialolympics.org/easy-read-accessibility" class="read"
+                                        style="color:aliceblue">Know More</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section class="contact" id="contact">
+                    <div class="contact-text">
+                        <h1>Contact<span>Us</span></h1>
+                        <h4>Get in touch</h4>
+                        <p>That sounds like an incredible initiative! Aarogyam, created by us, is dedicated to inspiring
+                            and supporting individuals with mental and psychological disorders. It provides resources,
+                            guidance, and shared experiences to help users manage challenges while fostering a community
+                            of understanding, encouragement, and empowerment.</p>
+                        <div class="contact-list">
+                            <li><i class='bx bxs-envelope'></i>ratnsharma21@gmail.com</li>
+                            <li><i class="bx bxs-phone"></i>9026678700</li>
+                            <li><i class="bx bxs-map"></i>Krishna Kunj 3rd, Jaipur</li>
+                        </div>
+
+                        <div class="contact-icons">
+                            <a href="https://www.linkedin.com/in/ratn-sharma-a2b282356?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"
+                                target="_blank">
+                                <i class="fab fa-linkedin"></i></a>
+                            <a href="https://github.com/ratn212126" style="--i:9"><i class="fab fa-github"></i></a>
+                            <a href="https://x.com/vgarg5960?t=KDnqoTtMpTbVhfp-eMRvgA&s=09" style="--i:10"><i
+                                    class="fab fa-twitter"></i></a>
+                            <a href="https://www.instagram.com/ratn_._k?igsh=b2JzZGw2YjI0bDFn" style="--i:12"><i
+                                    class="fab fa-instagram"></i></a>
+                        </div>
+                    </div>
+                    <div class="contact-form">
+                        <form id="contactForm" onsubmit="handleContactSubmit(event)">
+                            <input type="text" id="contactName" placeholder="Enter Your Name" required>
+                            <input type="number" id="contactNumber" placeholder="Enter Your Number" required>
+                            <input type="email" id="contactEmail" placeholder="Enter Your Email" required>
+                            <select name="inquiry-type" id="inquiryType" required>
+                                <option value="">Select Inquiry Type</option>
+                                <option value="support">Support Request</option>
+                                <option value="information">Information Request</option>
+                                <option value="appointment">Schedule Appointment</option>
+                            </select>
+                            <textarea id="contactMessage" cols="40" rows="10" placeholder="Enter Your Message" required></textarea>
+                            <input type="submit" value="submit" class="send">
+                        </form>
+                    </div>
+                </section>
+                <div class="last-text">
+                    <p>Developed by Team Titanic @2025</p>
+                </div>
+                <a href="#" class="top" onclick="scrollToTop(event)"><i class='bx bx-up-arrow-alt'></i></a>
+                <footer>
+                    <div class="footer-content">
+                        <div class="footer-section">
+                            <h4>Quick Links</h4>
+                            <ul>
+                                <li><a href="#home">Home</a></li>
+                                <li><a href="#about">About</a></li>
+                                <li><a href="#conditions">Conditions</a></li>
+                                <li><a href="#support">Support</a></li>
+                            </ul>
+                        </div>
+                        <div class="footer-section">
+                            <h4>Emergency Support</h4>
+                            <p>24/7 Crisis Hotline: <a href="tel:102">102</a></p>
+                            <p>Always here to help</p>
+                        </div>
+                        <div class="footer-section">
+                            <h4>Newsletter</h4>
+                            <form class="newsletter-form">
+                                <input type="email" placeholder="Enter your email">
+                                <button type="submit">Subscribe</button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="footer-bottom">
+                        <p>&copy; 2025 Aarogyam. All rights reserved.</p>
+                        <p style="font-size:14px;color:#012290f7;">We welcome feedback to improve accessibility.
+                            <b>Contact us anytime or use the feedback button.</b>
+                        </p>
+                    </div>
+                </footer>
+                <button id="emergency-support" class="emergency-button">
+                    🆘 24/7 Crisis Support
+                </button>
+                <script src="main.js"></script>
+                <script src="chatbot.js"></script>
+                <script src="cognitive-support.js"></script>
+                <script src="auth.js"></script>
+                <script>
+                    // Typing animation
+                    var typed = new Typed(".text", {
+                        strings: ["Support", "Resources", "Understanding", "Community"],
+                        typeSpeed: 100,
+                        backSpeed: 100,
+                        backDelay: 5000,
+                        startDelay: 500,
+                        loop: true,
+                        showCursor: false,
+                        fadeOut: false,
+                        autoInsertCss: true,
+                        smartBackspace: false
+                    });
+
+                    // Mobile menu functionality
+                    const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+                    const navbar = document.querySelector('.navbar');
+
+                    mobileMenuBtn.addEventListener('click', () => {
+                        navbar.classList.toggle('active');
+                        const isExpanded = navbar.classList.contains('active');
+                        mobileMenuBtn.setAttribute('aria-expanded', isExpanded);
+                    });
+
+                    // Close mobile menu when clicking outside
+                    document.addEventListener('click', (e) => {
+                        if (!navbar.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+                            navbar.classList.remove('active');
+                            mobileMenuBtn.setAttribute('aria-expanded', 'false');
+                        }
+                    });
+
+                    // Close mobile menu when clicking on a nav link
+                    document.querySelectorAll('.nav-links a').forEach(link => {
+                        link.addEventListener('click', () => {
+                            navbar.classList.remove('active');
+                            mobileMenuBtn.setAttribute('aria-expanded', 'false');
+                        });
+                    });
+
+                    // Smooth scroll for anchor links
+                    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                        anchor.addEventListener('click', function (e) {
+                            e.preventDefault();
+                            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                                behavior: 'smooth'
+                            });
+                        });
+                    });
+
+                    // Scroll to top functionality
+                    function scrollToTop(e) {
+                        e.preventDefault();
+                        window.scrollTo({
+                            top: 0,
+                            behavior: 'smooth'
+                        });
+                    }
+
+                    // Show/hide scroll-to-top button based on scroll position
+                    window.addEventListener('scroll', function () {
+                        const topButton = document.querySelector('.top');
+                        if (window.scrollY > 300) {
+                            topButton.style.opacity = '1';
+                            topButton.style.pointerEvents = 'auto';
+                        } else {
+                            topButton.style.opacity = '0';
+                            topButton.style.pointerEvents = 'none';
+                        }
+                    });
+                </script>
+</body>
+
+</html>
