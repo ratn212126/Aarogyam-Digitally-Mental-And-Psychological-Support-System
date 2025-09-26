@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aarogyam - Mental and Psychological Support System</title>
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        function navigateToClient(event) {
+            window.location.href = 'indexpage.html';
+        }
+        
+        // function navigateToDoctor(event) {
+        //     // Optional: Add any logic here before navigation
+        //     // localStorage.setItem('userType', 'doctor');
+            
+        //     // Navigate to the doctor page in same tab
+        //     window.location.href = 'doctor-page.html'; // or same page with different params
+        // }
+    </script>
+</head>
+<body>
+    <div class="background-overlay"></div>
+    
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo-placeholder">
+    <img src="./Boxicons-icons-images/Aarogyam.png" alt="Aarogyam Logo" class="logo-image">
+</div>
+                 
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="welcome-section">
+                <h2 class="welcome-title">Welcome to Aarogyam</h2>
+                <p class="welcome-subtitle">Your trusted Mental and Psychological support system </p>
+                
+                <div class="user-selection">
+                    <h3>Please select your access type:</h3>
+                    <div class="selection-buttons">
+                        <a href="index.html" class="btn btn-client" onclick="navigateToClient(event)">
+                            <div class="btn-icon">👤</div>
+                            <span>Continue as Client</span>
+                        </a>
+                        
+                        <a href="doctor-page.html" class="btn btn-doctor" onclick="navigateToDoctor(event)">
+                            <div class="btn-icon">🩺</div>
+                            <span>Continue as Doctor</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="contact-info">
+                    <h4>Contact Us</h4>
+                    <div class="contact-details">
+                        <div class="contact-item">
+                            <span class="contact-label">📞 Phone:</span>
+                            <span class="contact-value">+91 9026678700</span>
+                        </div>
+                        <div class="contact-item">
+                            <span class="contact-label">✉️ Email:</span>
+                            <span class="contact-value">ratnsharma21@gmail.com</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="footer-bottom">
+                    <p>&copy; 2025 Aarogyam. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
